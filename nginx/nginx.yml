@@ -1,0 +1,45 @@
+- hosts: proxy
+  become: yes
+  tasks:
+    - name: "enable epel repository"
+      yum:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+        
+    - name: "enable epel repository"
+      shell: yum-config-manager --enable epel
+      
+    - name: "enable epel repository"
+      shell: yum repolist
+      
+    - name: "install nginx"
+      yum:
+        name: nginx
+        
+    - name: "start nginx service"
+      service:
+        name: nginx
+        state: started
+        
+    - name: "copy nginx conf"
+      template:
+        src: template/nginx.conf
+        dest: "/etc/nginx/nginx.conf"
+        
+    - name: "reload nginx service"
+      service:
+        name: nginx
+        state: reloaded
+        
+    - name: "install python"
+      yum:
+        name: python2-certbot-nginx
+ #   - name: get  certbot
+ #     git: 
+ #      clone: https://github.com/letsencrypt/letsencrypt /opt/letsencrypt
+ #  - name: run debug
+ #     shell: /opt/letsencrypt/letsencrypt-auto --debug
+ #   - name: config file
+ #     shell: echo "rsa-key-size = 4096" >> /etc/letsencrypt/config.ini
+ #     shell: echo "email = tomasz.jarosz1994@gmail.com" >> /etc/letsencrypt/config.ini
+    - name: "tos"
+      shell: certbot -i nginx -d "google.pl" --nginx -m "tomasz.jarosz1994@gmail.com" --agree-tos --redirect
