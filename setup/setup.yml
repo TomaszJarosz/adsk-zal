@@ -2,35 +2,36 @@
 - hosts: application_nodes
   become: yes
   vars:
-     jar_source: /jar/location/todo
-     jar_destination: /opt/app_root/app.jar
-     app_user: application_user
+    jar_source: "./target/hello-world-0.0.1-SNAPSHOT.jar"
+    jar_destination: "/opt/application/hello-world.jar"
+    app_user: "hello_world_user"
   tasks:
     - name: "install jre"
       yum: 
-         name: java-1.8.0-openjdk
-         state: present
+        name: java-1.8.0-openjdk
+        state: present
          
     - name: "create path"
       file:
-         path: /opt/application
-         state: directory
+        path: /opt/application
+        state: directory
          
     - name: "copy.jar to remote machine"
       copy:
-        src: "{{jar_location}}"
-        dest: "{{app_location}}"
+        src: "{{jar_source}}"
+        dest: "{{jar_destination}}"
         
     - name: "create user"    
       user:
-         name: "{{app_user}}
+        name: "{{app_user}}"
       
-     - template: 
-         src:  template/carrental.service
-         dest: /etc/systemd/system/carrental.service
+    - template: 
+        src:  template/hello_world.service
+        dest: /etc/systemd/system/hello_world.service
         
-    - name: 
+    - name: "reload daemon"
       systemd:
-        name: carrental
+        name: hello_world
         daemon_reload: yes
         state: restarted
+        

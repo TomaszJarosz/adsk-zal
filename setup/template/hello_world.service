@@ -1,0 +1,12 @@
+[Unit]
+Description=Hello World REST Service
+After=network-online.target
+
+[Service]
+Type=simple
+User={{app_user}}
+ExecStart=/usr/bin/java -jar {{jar_destination}}
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
