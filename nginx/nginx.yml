@@ -1,6 +1,15 @@
 - hosts: proxy
   become: yes
+  vars:
+    domain_name: "tomaszjarosz.pl"
+    letsencrypt_email: "tomaszjarosz1994@gmail.com"
   tasks:
+  
+    - name: "Install git"
+      yum:
+        name: git
+        state: latest
+        
     - name: "enable epel repository"
       yum:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -33,13 +42,22 @@
     - name: "install python"
       yum:
         name: python2-certbot-nginx
- #   - name: get  certbot
- #     git: 
- #      clone: https://github.com/letsencrypt/letsencrypt /opt/letsencrypt
- #  - name: run debug
- #     shell: /opt/letsencrypt/letsencrypt-auto --debug
- #   - name: config file
- #     shell: echo "rsa-key-size = 4096" >> /etc/letsencrypt/config.ini
- #     shell: echo "email = tomasz.jarosz1994@gmail.com" >> /etc/letsencrypt/config.ini
-    - name: "tos"
-      shell: certbot -i nginx -d "google.pl" --nginx -m "tomasz.jarosz1994@gmail.com" --agree-tos --redirect
+        
+    - name: "get certbot"
+      git: 
+        repo: https://github.com/letsencrypt/letsencrypt 
+        version: master
+        dest: /opt/letsencrypt
+        clone: yes
+        
+    - shell: sudo certbot -i nginx -d "tomaszjarosz.pl" --nginx -m "tomaszjarosz1994@gmail.com" --agree-tos --redirect 
+    - service:
+        name: nginx
+        state: restarted    
+    - name: "run letsencrypt debug"
+      shell: /opt/letsencrypt/letsencrypt-auto --debug
+    - name: config file
+      shell: echo "rsa-key-size = 4096" >> /etc/letsencrypt/config.ini
+      shell: echo "email = tomasz.jarosz1994@gmail.com" >> /etc/letsencrypt/config.ini
+ 
+ 
