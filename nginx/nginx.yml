@@ -43,21 +43,21 @@
       yum:
         name: python2-certbot-nginx
         
-    - name: "get certbot"
-      git: 
-        repo: https://github.com/letsencrypt/letsencrypt 
-        version: master
-        dest: /opt/letsencrypt
-        clone: yes
-        
-    - shell: sudo certbot -i nginx -d "tomaszjarosz.pl" --nginx -m "tomaszjarosz1994@gmail.com" --agree-tos --redirect 
-    - service:
-        name: nginx
-        state: restarted    
-    - name: "run letsencrypt debug"
-      shell: /opt/letsencrypt/letsencrypt-auto --debug
-    - name: config file
-      shell: echo "rsa-key-size = 4096" >> /etc/letsencrypt/config.ini
-      shell: echo "email = tomasz.jarosz1994@gmail.com" >> /etc/letsencrypt/config.ini
+#    - name: "get certbot"
+#      git: 
+#        repo: https://github.com/letsencrypt/letsencrypt 
+#        version: master
+#        dest: /opt/letsencrypt
+#        clone: yes
+#        
+#    - shell: certbot -i nginx -d "tomaszjarosz.pl" --nginx -m "tomaszjarosz1994@gmail.com" --agree-tos --redirect 
+#    - service:
+#        name: nginx
+#        state: restarted    
+#    - name: "run letsencrypt debug"
+#      shell: /opt/letsencrypt/letsencrypt-auto --debug
+#    - name: config file
+#      shell: echo "rsa-key-size = 4096" >> /etc/letsencrypt/config.ini
+#      shell: echo "email = tomasz.jarosz1994@gmail.com" >> /etc/letsencrypt/config.ini
  
  
