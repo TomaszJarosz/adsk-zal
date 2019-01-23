@@ -6,6 +6,7 @@ After=network-online.target
 Type=simple
 User={{app_user}}
 ExecStart=/usr/bin/java -jar {{jar_destination}}
+StandardOutput=file:/home/ec2-user/temp/service_hello_world
 Restart=always
 
 [Install]
