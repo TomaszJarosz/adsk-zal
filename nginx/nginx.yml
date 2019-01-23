@@ -1,8 +1,13 @@
 - hosts: proxy
   become: yes
+  gather_facts: yes
   vars:
     domain_name: "tomaszjarosz.pl"
-    letsencrypt_email: "tomaszjarosz1994@gmail.com"
+    service_admin_email: "tomaszjarosz1994@gmail.com"
+    service_name: "tomaszjarosz.pl"
+    service_host: "tomaszjarosz.pl"
+    service_root_directory: "/opt"
+    letsencrypt_ssl_dir: "/etc/letsencrypt/live"
   tasks:
   
     - name: "Install git"
@@ -42,22 +47,53 @@
     - name: "install python"
       yum:
         name: python2-certbot-nginx
+
+    - name: "Generate dhparams file"
+      shell: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+ 
+    - name: "Lets Encrypt client"
+      git: dest=/opt/certbot clone=yes repo=https://github.com/certbot/certbot force=yes
+# Auto-renew certificates and reload nginx
+    - name: "Add crontab to renew certificates"
+      cron: minute="30" hour="2" weekday="1" job="/opt/certbot/certbot-auto renew >> /var/log/le-renew.log"
+      
+    - name: "Add crontab to reload server"
+      cron: minute="35" hour="2" weekday="1" job="/etc/init.d/nginx reload"
+
+    - name: "Creates directory nginx/sites-available"
+      file:
+        path: /etc/nginx/sites-available
+        state: directory
+        mode: 0775
         
-#    - name: "get certbot"
-#      git: 
-#        repo: https://github.com/letsencrypt/letsencrypt 
-#        version: master
-#        dest: /opt/letsencrypt
-#        clone: yes
-#        
-#    - shell: certbot -i nginx -d "tomaszjarosz.pl" --nginx -m "tomaszjarosz1994@gmail.com" --agree-tos --redirect 
-#    - service:
-#        name: nginx
-#        state: restarted    
-#    - name: "run letsencrypt debug"
-#      shell: /opt/letsencrypt/letsencrypt-auto --debug
-#    - name: config file
-#      shell: echo "rsa-key-size = 4096" >> /etc/letsencrypt/config.ini
-#      shell: echo "email = tomasz.jarosz1994@gmail.com" >> /etc/letsencrypt/config.ini
- 
- 
+    - name: "Creates directory nginx/sites-enabled for symlink"
+      file:
+        path: /etc/nginx/sites-enabled
+        state: directory
+        mode: 0775
+        
+    - name: "Add http nginx configuration"
+      template: src=./template/http.conf.j2 dest=/etc/nginx/sites-available/{{ service_name }}.http.conf mode=0644
+      
+    - name: "Add http nginx symlink"
+      file: src=/etc/nginx/sites-available/{{ service_name }}.http.conf dest=/etc/nginx/sites-enabled/{{ service_name }}.http state=link
+      
+    - name: "reload nginx"
+      service: name=nginx state=reloaded
+      
+      
+   # - name: Create certificate
+   #  shell: ./certbot-auto certonly --webroot --email {{ service_admin_email }} --agree-tos --webroot-path=/usr/share/nginx/html -d {{ service_host }};
+   #   args:
+   #      chdir: /opt/certbot
+   #
+    
+    - shell: certbot -i nginx -d {{ service_host }} --nginx -m {{ service_admin_email }} --agree-tos --redirect --reinstall
+         
+    - name: "Add https nginx configuration"
+      template: src=template/https.conf.j2 dest=/etc/nginx/sites-available/{{ service_name }}.https.conf mode=0644
+    - name: "Add external https nginx symlink"
+      file: src=/etc/nginx/sites-available/{{ service_name }}.https.conf dest=/etc/nginx/sites-enabled/{{ service_name }}.https state=link
+    
+    - name: "reload nginx"
+      service: name=nginx state=reloaded
