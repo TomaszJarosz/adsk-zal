@@ -11,3 +11,5 @@ ansible-playbook  -i /home/ec2-user/environment/adsk/projekt_zaliczeniowy/aws-se
 
 # ssh:
 ssh ec2-user@18.196.159.199 -i /home/ec2-user/environment/my_key.pem
+
+ssh-keygen -R 18.196.159.199

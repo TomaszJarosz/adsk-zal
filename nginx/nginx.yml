@@ -29,20 +29,15 @@
       yum:
         name: nginx
         
+    - name: "copy nginx conf"
+      template:
+        src: template/nginx.conf
+        dest: "/etc/nginx/nginx.conf" 
+        
     - name: "start nginx service"
       service:
         name: nginx
         state: started
-        
-    - name: "copy nginx conf"
-      template:
-        src: template/nginx.conf
-        dest: "/etc/nginx/nginx.conf"
-        
-    - name: "reload nginx service"
-      service:
-        name: nginx
-        state: reloaded
         
     - name: "install python"
       yum:
