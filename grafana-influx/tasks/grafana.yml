@@ -1,5 +1,5 @@
 ---
-- name: "Yum install grafana"
+- name: "install grafana"
   yum:
     name: "{{grafana_url}}"
     state: present
@@ -8,7 +8,7 @@
     src: templates/grafana.ini
     dest: /etc/grafana/grafana.ini
 
-- name: "add any source, in our case influx db"
+- name: "start grafana server"
   service:
     name: "grafana-server"
     state: restarted
@@ -24,17 +24,3 @@
     database: "metrics"
     access: direct
     is_default: yes
-- copy:
-    src: templates/dashboard/my.json
-    dest: /tmp/my.json
-- copy:
-    src: templates/dashboard/apache.json
-    dest: /tmp/apache.json
-- name: "create my dashboard"
-  grafana_dashboard:
-    grafana_url: "http://127.0.0.1:8080"
-    state: present
-    message: "Updated by ansible"
-    overwrite: yes
-    slug: "apache"
-    path: /tmp/apache.json
