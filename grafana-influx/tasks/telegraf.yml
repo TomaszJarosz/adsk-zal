@@ -5,7 +5,7 @@
     state: present
 - name: "Copy Telegraf config"
   template:
-    src: templates/telegraf.conf
+    src: ../templates/telegraf.conf
     dest: /etc/telegraf/telegraf.conf
 - name: "Start Telegraf"
   service:

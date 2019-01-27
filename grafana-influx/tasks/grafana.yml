@@ -5,7 +5,7 @@
     state: present
 - name: "Put cfg in place"
   template:
-    src: templates/grafana.ini
+    src: ../templates/grafana.ini
     dest: /etc/grafana/grafana.ini
 
 - name: "start grafana server"
