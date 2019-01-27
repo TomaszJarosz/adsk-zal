@@ -1,0 +1,15 @@
+---
+- name: "Download Wordpress"
+  get_url:
+    url: https://wordpress.org/latest.zip
+    dest: /tmp/wp.zip
+- name: "Unpack wordpress"
+  unarchive:
+    src: /tmp/wp.zip
+    dest: /var/www/
+    remote_src: yes
+- name: "Copy wordpress config"
+  template:
+    src: templates/public/wp-config.php
+    dest: /var/www/wordpress/wp-config.php
+    

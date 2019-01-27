@@ -1,0 +1,17 @@
+---
+- name: "Install packages"
+  yum:
+    name: "{{packages}}"
+    state: present
+  vars:
+    packages:
+      - httpd
+      - mariadb
+      - mariadb-server
+      - php
+      - php-mysql
+      - MySQL-python
+- name: "Install apache modules"
+  apache2_module:
+    state: present
+    name: status
