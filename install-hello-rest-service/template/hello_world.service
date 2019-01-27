@@ -1,0 +1,13 @@
+[Unit]
+Description=Hello World REST Service
+After=network-online.target
+
+[Service]
+Type=simple
+User={{app_user}}
+ExecStart=/usr/bin/java -jar {{jar_destination}}
+StandardOutput=file:/home/ec2-user/temp/service_hello_world
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

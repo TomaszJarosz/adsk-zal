@@ -2,14 +2,11 @@
 - hosts: web_nodes
   become: yes
   vars:
-    wordpress_path: /var/www/wordpress
     db_node_ip: 18.195.217.30
     telegraf_url: https://dl.influxdata.com/telegraf/releases/telegraf-1.8.3-1.x86_64.rpm
     metric_store_ip: 18.195.217.30
   tasks:
     - include_tasks: tasks/public/os-dependencies.yml
-    - include_tasks: tasks/public/install-wordpress.yml
-    - include_tasks: tasks/public/configure-apache.yml
     - include_tasks: tasks/public/install-telegraf.yml
 
 - hosts: db_nodes
@@ -18,7 +15,6 @@
     web_nodes: 18.195.217.30
   tasks:
     - include_tasks: tasks/private/os-dependencies.yml
-    - include_tasks: tasks/private/create-wordpress-database.yml
 
 
 
