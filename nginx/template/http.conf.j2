@@ -1,7 +1,7 @@
 # roles/service/templates/http.conf.j2
 server {
   listen 80;
-  server_name {{ service_host }};
+  server_name {{ domain_name }};
   root /usr/share/nginx/html;
   index index.html index.htm index.nginx-debian.html;
   location ~ /.well-known {
