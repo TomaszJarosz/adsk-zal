@@ -1,8 +1,8 @@
 # adsk-zal
 # SETUP
 # start the ssh-agent in the background
-eval $(ssh-agent -s)
-ssh-add /home/ec2-user/environment/my_key.pem
+-eval $(ssh-agent -s) 
+-ssh-add /home/ec2-user/environment/my_key.pem
 
 
 # LAUNCH
