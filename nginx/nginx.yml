@@ -57,20 +57,20 @@
     mode: 0775
 
 - name: "Add http nginx configuration"
-  template: src=./template/http.conf.j2 dest=/etc/nginx/sites-available/{{ service_name }}.http.conf mode=0644
+  template: src=./template/http.conf.j2 dest=/etc/nginx/sites-available/{{ domain_name }}.http.conf mode=0644
 
 - name: "Add http nginx symlink"
-  file: src=/etc/nginx/sites-available/{{ service_name }}.http.conf dest=/etc/nginx/sites-enabled/{{ service_name }}.http state=link
+  file: src=/etc/nginx/sites-available/{{ domain_name }}.http.conf dest=/etc/nginx/sites-enabled/{{ domain_name }}.http state=link
 
 - name: "reload nginx"
   service: name=nginx state=reloaded
 
-- shell: certbot -i nginx -d {{ service_host }} --nginx -m {{ service_admin_email }} --agree-tos --redirect --reinstall
+- shell: certbot -i nginx -d {{ domain_name }} --nginx -m {{ service_admin_email }} --agree-tos --redirect --reinstall
 
 - name: "Add https nginx configuration"
-  template: src=template/https.conf.j2 dest=/etc/nginx/sites-available/{{ service_name }}.https.conf mode=0644
+  template: src=template/https.conf.j2 dest=/etc/nginx/sites-available/{{ domain_name }}.https.conf mode=0644
 - name: "Add external https nginx symlink"
-  file: src=/etc/nginx/sites-available/{{ service_name }}.https.conf dest=/etc/nginx/sites-enabled/{{ service_name }}.https state=link
+  file: src=/etc/nginx/sites-available/{{ domain_name }}.https.conf dest=/etc/nginx/sites-enabled/{{ domain_name }}.https state=link
 
 - name: "reload nginx"
   service: name=nginx state=reloaded

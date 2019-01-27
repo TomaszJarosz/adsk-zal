@@ -28,10 +28,8 @@
   become: yes
   gather_facts: yes
   vars:
-    domain_name: "tomaszjarosz.pl"
+    domain_name: "tomekj.pl"
     service_admin_email: "tomaszjarosz1994@gmail.com"
-    service_name: "tomaszjarosz.pl"
-    service_host: "tomaszjarosz.pl"
     service_root_directory: "/opt"
     letsencrypt_ssl_dir: "/etc/letsencrypt/live"
   tasks:
