@@ -9,6 +9,6 @@
 ansible-playbook  -i /home/ec2-user/environment/adsk/projekt_zaliczeniowy/aws-secured-environment/hosts.ini /home/ec2-user/environment/adsk/projekt_zaliczeniowy/aws-secured-environment/install-secured-environment.yml
 
 # ssh:
-ssh ec2-user@18.196.159.199 -i /home/ec2-user/environment/my_key.pem
+ssh ec2-user@{ip_address} -i /home/ec2-user/environment/my_key.pem
 
-ssh-keygen -R 18.196.159.199
+ssh-keygen -R {ip_address}
